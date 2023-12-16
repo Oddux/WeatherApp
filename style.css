@@ -1,0 +1,47 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background:url('https://unsplash.com/photos/birds-eye-view-of-mountains-under-nimbus-cumulus-clouds-ZjfEmlH3m60');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    padding: 30px 90px;
+    margin: 10px;
+    background: rgba(24,24,27, 0.5);
+}
+
+h1{
+    font-size: 70px;
+    font-weight: 100;
+    color:#fff;
+}
+
+.date-time{
+    font-size: 30px;
+    font-weight: 100;
+    color: #fff;
+}
+
+.container{
+    padding: 20px 70px;
+    /* color: #fff */
+}
+
+.currentInfo{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+
