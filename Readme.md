@@ -17,7 +17,7 @@ A source-code editor is needed to edit/run code, such as VS Code
 
 ## Usage
 
-Enter city name in prompt to view 5 day weather forcast
+Enter city name in prompt to view 5 day weather forcast for that city.
 
 ## Credits
 
