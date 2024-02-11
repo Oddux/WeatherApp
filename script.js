@@ -106,7 +106,7 @@ function showWeatherData(data) {
   let {humidity, pressure, temp} = data.main;
   let {speed} = data.wind
 
-  cityName.innerHTML= data.name;
+  cityName.innerHTML= `<h1 id="cityName">${data.name}</h1>;`
 
   currentWeatherEl.innerHTML = `
   <div class ="conditions">${data.weather[0].main}
