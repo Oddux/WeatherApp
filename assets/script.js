@@ -6,6 +6,12 @@ const weatherForecastEl = document.querySelector(".forecast");
 const currentTempEl = document.getElementById("current-temp");
 const searchBtn = document.querySelector(".searchBtn")
 const cityInput = document.querySelector(".cityInput")
+const cityNameEl = document.getElementById("cityName")
+const citySearchesEl = document.getElementById("citySearches")
+
+const searchHistory = (window.localStorage.getItem("searchHistory") || "").split(",")
+console.log(searchHistory)
+showSearchHistory ()
 
 const days = [
   "Sunday",
@@ -56,6 +62,12 @@ setInterval(() => {
 
 const getCityCoordinates = () => {
   const cityName = cityInput.value.trim();
+  searchHistory.splice(0,0,cityName);
+  if (searchHistory.length > 5){
+    searchHistory.splice(5,searchHistory.length-5)
+  }
+  window.localStorage.setItem ("searchHistory", searchHistory);
+  showSearchHistory ()
   if (cityName === "") return;
   const API_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&limit=1&appid=${API_KEY}&units=imperial`;
   getWeatherData(cityName);
@@ -66,30 +78,60 @@ const getCityCoordinates = () => {
       console.log(data)
       getWeatherDetails(data);
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(err)
       alert("An error occurred while fetching the data!");
     });
 };
+
+function showSearchHistory () {
+  if (searchHistory.length === 0){
+    citySearchesEl.innerHTML = ""
+  } else {
+    let cityHTML = "<ul>"
+    for (i =0; i <searchHistory.length; i++){
+      cityHTML +=`<li> 
+        <a href="#${searchHistory[i]}">
+          ${searchHistory[i]}
+        </a>
+      </li>`
+    }
+    cityHTML += "</ul>"
+    citySearchesEl.innerHTML = cityHTML
+  }
+}
 
 function getWeatherDetails(data) {
   weatherForecastEl.innerHTML =""
   for (i =2; i < data.list.length; i = i +8) {
     console.log(data.list[i])
+    let {humidity, pressure, temp} = data.list[i].main;
+    let {speed} = data.list[i].wind
     weatherForecastEl.innerHTML += `<div class="advanceForecast">
-    <div class ="day">${dayjs.unix(data.list[i].dt).format("MM/DD/YYYY")}</div>
-    <div class ="conditions">
-        <img src="https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png" alt="weather icon" class="weatherIcon">
-    </div>
-    <div class ="temp">Day - ${data.list[i].main.temp}</div>                
-</div>`
+      <div class ="day">${dayjs.unix(data.list[i].dt).format("MM/DD/YYYY")}</div>
+      <div class ="conditions">${data.list[i].weather[0].main}
+          <img src="https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png" alt="weather icon" class="weatherIcon">
+      </div>
+      <div class="temp">
+        <div>Temp ${temp}</div>
+      </div>
+      <div class="weather-item">
+          <div>Humidity ${humidity}%</div>
+      </div>
+      <div class="weather-item">
+          <div>Pressure ${pressure}</div>
+      </div>
+      <div class="weather-item">
+          <div>Wind Speed ${speed}</div>
+      </div>
+    </div>`
     }
-//  weatherForecastEl.innerHTML = otherDayForecast;
 }
 
 
 function getWeatherData(cityName) {
-  navigator.geolocation.getCurrentPosition((success) => {
-    let { latitude, longitude } = success.coords;
+  // navigator.geolocation.getCurrentPosition((success) => {
+  //   let { latitude, longitude } = success.coords;
 
     fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=imperial`
@@ -98,15 +140,19 @@ function getWeatherData(cityName) {
       .then((data) => {
         console.log(data);
         showWeatherData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("An error occurred while fetching the data!");
       });
-  });
+  // });
 }
 
 function showWeatherData(data) {
   let {humidity, pressure, temp} = data.main;
   let {speed} = data.wind
 
-  cityName.innerHTML= `<h1 id="cityName">${data.name}</h1>;`
+  cityNameEl.innerHTML= data.name
 
   currentWeatherEl.innerHTML = `
   <div class ="conditions">${data.weather[0].main}
@@ -114,23 +160,23 @@ function showWeatherData(data) {
     </div>
 
     <div class="temp">
-        <div>Temp</div>
-        <div>${temp}%</div>
+        <div>Temp ${temp}</div>
     </div>
       <div class="weather-item">
-        <div>Humidity</div>
-        <div>${humidity}%</div>
+        <div>Humidity ${humidity}%</div>
     </div>
     <div class="weather-item">
-        <div>Pressure</div>
-        <div>${pressure}</div>
+        <div>Pressure ${pressure}</div>
     </div>
     <div class="weather-item">
-        <div>Wind Speed</div>
-        <div>${speed}</div>
-    </div>
-    `;
+        <div>Wind Speed ${speed}</div>
+    </div>`;
 }
 
 searchBtn.addEventListener("click", getCityCoordinates);
-
+window.onhashchange = function () {
+  const cityName = decodeURI(window.location.hash.substring(1))
+  console.log("meow", cityName)
+  cityInput.value = cityName
+  getCityCoordinates ()
+}

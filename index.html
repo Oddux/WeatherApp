@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
     <title>5DayWeather</title>
 </head>
 <body>
@@ -13,6 +13,8 @@
             <h3>Enter City Name</h3>
             <input class="cityInput" type="text" placeholder="e.g., Tampa, Salt Lake City, etc.,">
             <button class="searchBtn">Search</button>
+        </div>
+        <div id="citySearches">
         </div>
         <div class = "date-time" id="time">
             12:30  <span id="am-pm">PM</span>
@@ -24,7 +26,7 @@
 
     </div>
     <div class="currentInfo">
-        <div class= "infoBox" id="currentWeather">
+        <div class= "infoBox" id="currentWeather">Today
             <div class ="conditions">Cloudy
                 <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="weatherIcon">
             </div>
@@ -67,5 +69,5 @@
 
 </body>
 <script src= "https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
-<script src="script.js"></script>
+<script src="assets/script.js"></script>
 </html>
